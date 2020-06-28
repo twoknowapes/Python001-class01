@@ -31,7 +31,7 @@ class MongoPipeline(object):
     @classmethod
     def from_crawler(cls, crawler):
         return cls(
-            mongo_uri=crawler.settings.get('MONGO_UTI'),
+            mongo_uri=crawler.settings.get('MONGO_URI'),
             mongo_db=crawler.settings.get('MONGO_DB'),
         )
 
@@ -40,7 +40,7 @@ class MongoPipeline(object):
         self.db = self.client[self.mongo_db]
 
     def process_item(self, item, spider):
-        self.db['item.collection'].insert(dict(item))
+        self.db[item.collection].insert(dict(item))
         return item
 
     def close_spider(self, spider):

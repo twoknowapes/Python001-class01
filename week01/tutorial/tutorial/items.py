@@ -9,6 +9,8 @@ import scrapy
 
 
 class TutorialItem(scrapy.Item):
+    collection = table = 'quotes'
+
     text = scrapy.Field()
     author = scrapy.Field()
     tags = scrapy.Field()
