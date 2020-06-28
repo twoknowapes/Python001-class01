@@ -6,6 +6,11 @@
 # https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 
 from scrapy import signals
+from scrapy.exceptions import NotConfigured
+
+from urllib.parse import urlparse
+from collections import defaultdict
+import random
 
 
 class MaoyanSpiderMiddleware:
@@ -101,3 +106,33 @@ class MaoyanDownloaderMiddleware:
 
     def spider_opened(self, spider):
         spider.logger.info('Spider opened: %s' % spider.name)
+
+
+class RandomHttpProxyMiddleware:
+    def __init__(self, auth_encoding='utf-8', proxy_list=None):
+        self.user_agent = [
+            'Mozilla/5.0 (Windows; U; MSIE 9.0; Windows NT 9.0; en-US)',
+            'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.2 (KHTML, like Gecko) Chrome/22.0.1216.0 Safari/537.2',
+            'Mozilla/5.0 (X11; Ubuntu; Linux i686; rv:15.0) Gecko/20100101 Firefox/15.0.1'
+        ]
+        self.proxies = defaultdict(list)
+        for proxy in proxy_list:
+            parse = urlparse(proxy)
+            self.proxies[parse.scheme].append(proxy)
+
+    @classmethod
+    def from_crawler(cls, crawler):
+        if not crawler.settings.get('HTTP_PROXY_LIST'):
+            raise NotConfigured
+
+        http_proxy_list = crawler.settings.get('HTTP_PROXY_LIST')
+        auth_encoding = crawler.settings.get('HTTPPROXY_AUTH_ENCODING', 'utf-8')
+        return cls(auth_encoding, http_proxy_list)
+
+    def process_request(self, request, scheme):
+        request.meta['proxy'] = random.choice(self.proxies[scheme])
+        request.headers['User-Agent'] = random.choice(self.user_agent)
+
+    def process_response(self, request, response, spider):
+        response.status = 201
+        return response

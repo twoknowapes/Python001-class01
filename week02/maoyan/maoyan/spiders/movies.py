@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
 import scrapy
+from scrapy import Selector
+
+from ..items import MaoyanItem
 
 
 class MoviesSpider(scrapy.Spider):

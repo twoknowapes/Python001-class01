@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Scrapy settings for maoyan project
+# Scrapy settings for downloadertest project
 #
 # For simplicity, this file contains only settings considered important or
 # commonly used. You can find more settings consulting the documentation:
@@ -9,13 +9,13 @@
 #     https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 #     https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 
-BOT_NAME = 'maoyan'
+BOT_NAME = 'downloadertest'
 
-SPIDER_MODULES = ['maoyan.spiders']
-NEWSPIDER_MODULE = 'maoyan.spiders'
+SPIDER_MODULES = ['downloadertest.spiders']
+NEWSPIDER_MODULE = 'downloadertest.spiders'
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
-# USER_AGENT = 'maoyan (+http://www.yourdomain.com)'
+# USER_AGENT = 'downloadertest (+http://www.yourdomain.com)'
 
 # Obey robots.txt rules
 ROBOTSTXT_OBEY = True
@@ -46,20 +46,14 @@ ROBOTSTXT_OBEY = True
 # Enable or disable spider middlewares
 # See https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 # SPIDER_MIDDLEWARES = {
-#    'maoyan.middlewares.MaoyanSpiderMiddleware': 543,
+#    'downloadertest.middlewares.DownloadertestSpiderMiddleware': 543,
 # }
 
 # Enable or disable downloader middlewares
 # See https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 DOWNLOADER_MIDDLEWARES = {
-    'maoyan.middlewares.MaoyanDownloaderMiddleware': 543,
-    'maoyan.middlewares.RandomHttpProxyMiddleware': 400
+    'downloadertest.middlewares.RandomUserAgentMiddleware': 543,
 }
-
-HTTP_PROXY_LIST = [
-    'http://52.179.231.206:80',
-    'http://95.0.194.241.9090',
-]
 
 # Enable or disable extensions
 # See https://docs.scrapy.org/en/latest/topics/extensions.html
@@ -70,7 +64,7 @@ HTTP_PROXY_LIST = [
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 # ITEM_PIPELINES = {
-#    'maoyan.pipelines.MaoyanPipeline': 300,
+#    'downloadertest.pipelines.DownloadertestPipeline': 300,
 # }
 
 # Enable and configure the AutoThrottle extension (disabled by default)
@@ -93,9 +87,3 @@ HTTP_PROXY_LIST = [
 # HTTPCACHE_DIR = 'httpcache'
 # HTTPCACHE_IGNORE_HTTP_CODES = []
 # HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
-
-MYSQL_HOST = 'rm-uf6dt513p967o8lm13o.mysql.rds.aliyuncs.com'
-MYSQL_DATABASE = 'geektime'
-MYSQL_USER = 'crash'
-MYSQL_PASSWORD = 'mysql@2020'
-MYSQL_PORT = 3306
