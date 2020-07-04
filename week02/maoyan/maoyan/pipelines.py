@@ -27,22 +27,38 @@ class MysqlPipeline(object):
         )
 
     def open_spider(self, spider):
-        self.db = pymysql.connect(self.host,
-                                  self.user,
-                                  self.password,
-                                  self.database,
-                                  charset='utf8',
-                                  port=self.port)
-        self.cursor = self.db.cursor()
+        self.conn = pymysql.connect(self.host,
+                                    self.user,
+                                    self.password,
+                                    self.database,
+                                    charset='utf8',
+                                    port=self.port)
+        self.cursor = self.conn.cursor()
 
-    def close_spider(self, spider):
-        self.db.close()
+        create_aql = '''
+            CREATE TABLE movies(
+                id int NOT NULL AUTO_INCREMENT,
+                名称 val(200) NOT NULL,
+                类型 val(50) NOT NULL,
+                上映时间 val(100) NOT NULL,
+                PRIMARY KET (id))
+                ENGINE = MyIASM AUTO_INCREMENT = 1 DEFAULT  CHARSET = utf8mb4
+        '''
+        self.cursor.execute(create_aql)
 
     def process_item(self, item, spider):
         data = dict(item)
         keys = ','.join(data.keys())
         values = ','.join(['%s'] * len(data))
-        sql = 'insert into %s (%s) values (%s)' % (item.table, keys, values)
-        self.cursor.execute(sql, tuple(data.values()))
-        self.db.commit()
+        insert_sql = '''
+        INSERT INTO TABLE movies(名称，类型，上映时间) VALUES (%s, %s, %s, %s)
+        '''
+        try:
+            self.cursor.executemany(insert_sql, data)
+            # self.cursor.execute(sql, tuple(data.values()))
+        except:
+            self.conn.rollback()
+        finally:
+            self.cursor.close()
+            self.conn.close()
         return item
