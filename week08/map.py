@@ -3,8 +3,7 @@ class map(object):
     def __getattribute__(self, *args, **kwargs):
         pass
 
-    def __init__(self, func,
-                 *iterables):
+    def __init__(self, func, *iterables):
         pass
 
     def __iter__(self, *args, **kwargs):
